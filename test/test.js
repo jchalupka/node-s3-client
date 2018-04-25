@@ -26,9 +26,18 @@ var before = global.before;
 
 var s3Bucket = process.env.S3_BUCKET;
 
-if (!s3Bucket || !process.env.S3_KEY || !process.env.S3_SECRET) {
+// If not all settings are loaded try to load a .env file
+if (!allSettingsAreLoaded) {
+  require('dotenv').load();
+}
+
+if (!allSettingsAreLoaded) {
   console.log("S3_BUCKET, S3_KEY, and S3_SECRET env vars needed to run tests");
   process.exit(1);
+}
+
+function allSettingsAreLoaded() {
+  return s3Bucket && process.env.S3_KEY && process.env.S3_SECRET
 }
 
 function createClient() {
