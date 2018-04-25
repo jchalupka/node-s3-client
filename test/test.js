@@ -1,4 +1,5 @@
 var s3 = require('../');
+require('dotenv').config();
 var MultipartETag = require('../lib/multipart_etag');
 var path = require('path');
 var ncp = require('ncp');
@@ -24,20 +25,15 @@ var it = global.it;
 var after = global.after;
 var before = global.before;
 
-var s3Bucket = process.env.S3_BUCKET;
-
-// If not all settings are loaded try to load a .env file
-if (!allSettingsAreLoaded) {
-  require('dotenv').load();
-}
-
-if (!allSettingsAreLoaded) {
+if (!allSettingsAreLoaded()) {
   console.log("S3_BUCKET, S3_KEY, and S3_SECRET env vars needed to run tests");
   process.exit(1);
 }
 
+var s3Bucket = process.env.S3_BUCKET;
+
 function allSettingsAreLoaded() {
-  return s3Bucket && process.env.S3_KEY && process.env.S3_SECRET
+  return process.env.S3_BUCKET && process.env.S3_KEY && process.env.S3_SECRET
 }
 
 function createClient() {
